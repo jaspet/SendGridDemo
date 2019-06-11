@@ -12,7 +12,7 @@ namespace SendGridDemo.Data.Utilities
             var abbreviation = pacificStandardTimeZone.IsDaylightSavingTime(time)
                 ? "PDT"
                 : "PST";
-            var ret = pacificStandardTime.ToString("MM-dd hh:mm", CultureInfo.CurrentCulture)
+            var ret = pacificStandardTime.ToString("MM-dd hh:mm tt", CultureInfo.CurrentCulture)
                       + " " + abbreviation;
             return ret;
         }

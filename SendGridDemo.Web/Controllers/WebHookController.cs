@@ -21,13 +21,8 @@ namespace SendGridDemo.Web.Controllers
                 {
                     return new StatusCodeResult((int)HttpStatusCode.Unauthorized);
                 }
-                string messageId = emailEvent.sg_message_id;
-                var index = emailEvent.sg_message_id.IndexOf(".");
-                if (index != -1)
-                {
-                    messageId = emailEvent.sg_message_id.Substring(0, emailEvent.sg_message_id.IndexOf("."));
-                }
-                messageId = messageId.Replace("filter", string.Empty);
+                string messageId = GetMessageId(emailEvent.sg_message_id);
+                
                 var emailMessage = dbContext.EmailMessages.Include(x => x.EmailEvents).SingleOrDefault(x => x.MessageId == messageId);
                 if (emailMessage == null)
                 {
@@ -45,6 +40,17 @@ namespace SendGridDemo.Web.Controllers
             }
             dbContext.SaveChanges();
             return new StatusCodeResult((int)HttpStatusCode.OK);
+        }
+
+        private string GetMessageId(string messageId)
+        {
+            var index = messageId.IndexOf(".");
+            if (index != -1)
+            {
+                messageId = messageId.Substring(0, messageId.IndexOf("."));
+            }
+            messageId = messageId.Replace("filter", string.Empty);
+            return messageId;
         }
 
         private string GetAuthenticationSignature()
