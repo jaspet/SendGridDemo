@@ -1,0 +1,89 @@
+@using IntelliTect.Coalesce.Knockout.Helpers
+
+<div class="card">
+    <div class="card-heading">
+        <div class="btn-group pull-right">
+            <button onclick="window.history.back()" class="btn btn-xs btn-default"><i class="fa fa-arrow-left"></i> Back</button>
+            <button data-bind="click:function() { load(); }" class="btn btn-xs btn-default"><i class="fa fa-refresh"></i> Refresh</button>
+        </div>
+        <h1 class="card-title clearfix" style="display:inline-block;">Email Message Event</h1>
+        <span class="label label-info" data-bind="fadeVisible: isLoading()">Loading...</span>
+    </div>
+    <div class="card-body">
+        <div class="form-horizontal">
+            <div class="form-group btn-warning" style="display: none" data-bind="if: errorMessage(), visible: errorMessage()">
+                <label class="col-md-4 control-label">Error</label>
+                <div class="col-md-8">
+                    <div class="form-control-static" data-bind="text: errorMessage"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Email Message</label>
+                <div class="col-md-7 prop-emailMessage">@(Knockout.SelectForObject<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.EmailMessage))</div>
+                <div class="col-md-1" data-bind="with: emailMessage">
+                    <a data-bind="attr: {href: editUrl}" class="btn btn-default pull-right"><i class="fa fa-ellipsis-h "></i></a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Time Stamp</label>
+                <div class="col-md-8 prop-timeStamp">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.TimeStamp))</div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Event Time</label>
+                <div class="col-md-8 prop-eventTime">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.EventTime, false))</div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Event</label>
+                <div class="col-md-8 prop-event">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Event))</div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Send Grid Event Id</label>
+                <div class="col-md-8 prop-sendGridEventId">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.SendGridEventId))</div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Response</label>
+                <div class="col-md-8 prop-response">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Response))</div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Url</label>
+                <div class="col-md-8 prop-url">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Url))</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+{
+<script>
+    var model = new ViewModels.EmailMessageEvent();
+    model.includes = "Editor";
+    model.saveCallbacks.push(function(obj){
+        // If there is a new id, set the one for this page
+        if (!Coalesce.Utilities.GetUrlParameter('id')){
+            if (model.myId) {
+                var newUrl = Coalesce.Utilities.SetUrlParameter(window.location.href, "id", model.myId);
+                window.history.replaceState(null, window.document.title, newUrl);
+            }
+        }
+    });
+    @if (ViewBag.Id != null)
+    {
+        @:model.load('@ViewBag.Id');
+    }
+    @foreach (var kvp in ViewBag.ParentIds)
+    {
+        @:model.@(((string)(@kvp.Key)))(@kvp.Value);
+    }
+
+    window.onbeforeunload = function(){
+        if (model.isDirty()) model.save();
+    }
+    model.coalesceConfig.autoSaveEnabled(false);
+    model.loadChildren(function() {
+        ko.applyBindings(model);
+        model.coalesceConfig.autoSaveEnabled(true);
+    });
+</script>
+}

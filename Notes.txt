@@ -1,0 +1,11 @@
+1) Show general setup of sendgrid
+2) Show general setup of app
+3) Install NGrok
+
+webhook.site -> json2csharp.com
+Make sure to talk about sender Auth - Hotmail won't accept, etc.
+
+Keen.io
+
+mhN85UgmRXWrO3ZPVdrVdQ.0355p1iad2-26774-5CFAE42B-D.0
+mhN85UgmRXWrO3ZPVdrVdQ
