@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SendGridDemo.Data;
 using SendGridDemo.Data.Models;
-using System.IO;
 using System.Linq;
 using System.Net;
 
@@ -14,17 +13,8 @@ namespace SendGridDemo.Web.Controllers
     {
         [AllowAnonymous]
         [HttpPost]
-        //[Route("api/sendgridwebhook")]
         public ActionResult SendGridWebhook([FromBody] SendGridEvent[] eventList, [FromServices]AppDbContext dbContext)
         {
-            MemoryStream memstream = new MemoryStream();
-            Request.Body.CopyTo(memstream);
-            memstream.Position = 0;
-            using (StreamReader reader = new StreamReader(memstream))
-            {
-                string text = reader.ReadToEnd();
-            }
-
             foreach (var emailEvent in eventList)
             {
                 if (emailEvent.AuthenticationSignature != GetAuthenticationSignature())

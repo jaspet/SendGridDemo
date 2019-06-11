@@ -24,7 +24,6 @@ namespace SendGridDemo.Data.Models
             try
             {
                 EmailMessage newMsg = new EmailMessage() { To = to, Subject = subject, MessageText = message };
-                //var emailSender = serviceProvider.GetService(typeof(IEmailSender)) as IEmailSender;
                 var result = await emailSender.SendEmailAsync(to, subject, message);
                 var data = result.DeserializeResponseHeaders(result.Headers);
                 string messageId = data["X-Message-Id"];
