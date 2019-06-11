@@ -1,12 +1,12 @@
 ﻿@{
-    string applicationName = "ApplicationName";
+    string applicationName = "SendGrid Demo";
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - My ASP.NET Application</title>
+    <title>@ViewData["Title"] - SendGrid Demo</title>
 
     <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -30,8 +30,6 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
 		<ul class="nav navbar-nav navbar-right">
                     <li class="navbar-text">Signed in as @User.Identity.Name</li>
