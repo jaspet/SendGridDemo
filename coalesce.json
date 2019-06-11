@@ -1,0 +1,8 @@
+{
+  "webProject": {
+    "projectFile": "./SendGridDemo.Web/SendGridDemo.Web.csproj"
+  },
+  "dataProject": {
+    "projectFile": "./SendGridDemo.Data/SendGridDemo.Data.csproj"
+  }
+}

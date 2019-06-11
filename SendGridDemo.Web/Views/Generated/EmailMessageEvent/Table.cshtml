@@ -1,0 +1,180 @@
+@using IntelliTect.Coalesce.Knockout.Helpers
+
+@{ ViewBag.Fluid = true; }
+
+<style>
+    td div a {
+        display: block;
+    }
+    th.sortable-header {
+        cursor: pointer;
+    }
+    th.sortable-header:hover {
+        background-color: #e6e6e6
+    }
+    .table-view-header {
+        padding: 10px 15px;
+    }
+</style>
+<div class="table-view obj-emailMessageEvent">
+    <div class="table-view-header">
+        <div class="clearfix">
+            <h1 style="display: inline-block">
+                Email Message Event List
+                <span style="font-size: .5em; padding-left: 20px;"><a href="~/EmailMessageEvent/Docs">API Docs</a></span>
+            </h1>
+        </div>
+        <div class="clearfix">
+            <div style="display: inline-block; font-size: 1.1em; margin-right: 10px;">
+                <i class="fa fa-arrow-circle-left" data-bind="enabled: previousPageEnabled() && !isLoading(), click: previousPage"></i>
+                Page
+                <input data-bind="value: page" style="width: 35px">
+                of
+                <span data-bind="text: pageCount"></span>
+                <i class="fa fa-arrow-circle-right" data-bind="enabled: nextPageEnabled() && !isLoading(), click: nextPage"></i>
+            </div>
+            <select class="form-control" style="width: 100px; display: inline-block;" data-bind="value: pageSize">
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            </select>
+            <input class="form-control pull-right" style="width: 250px; margin-left: 20px" data-bind="textInput: search" placeholder="Search" />
+            <div class="btn-group pull-right">
+                <a href="~/EmailMessageEvent/CreateEdit?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-plus"></i> Create</a>
+                <button data-bind="click:load" class="btn btn-sm btn-default "><i class="fa fa-refresh"></i> Refresh</button>
+                @if (ViewBag.Editable)
+                {
+                    <a href="~/EmailMessageEvent/Table?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-lock"></i> Make Read-only</a>
+                }
+                else
+                {
+                    <a href="~/EmailMessageEvent/TableEdit?@ViewBag.Query" role="button" class="btn btn-sm btn-default "><i class="fa fa-pencil"></i> Make Editable</a>
+                }
+                <a href="#" role="button" class="btn btn-sm btn-default " data-bind="attr:{href: downloadAllCsvUrl}"><i class="fa fa-download"></i> CSV</a>
+                <button role="button" class="btn btn-sm btn-default " data-bind="click: csvUploadUi"><i class="fa fa-upload"></i> CSV</button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="card table-view-body">
+        <div class="card-body">
+            <table class="table @(ViewBag.Editable ? "editable" : "" )">
+                <thead>
+                    <tr>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('EmailMessage')}">
+                            Email Message
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'EmailMessage', 'fa-caret-down': orderByDescending() == 'EmailMessage'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('TimeStamp')}">
+                            Time Stamp
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'TimeStamp', 'fa-caret-down': orderByDescending() == 'TimeStamp'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('EventTime')}">
+                            Event Time
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'EventTime', 'fa-caret-down': orderByDescending() == 'EventTime'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('Event')}">
+                            Event
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'Event', 'fa-caret-down': orderByDescending() == 'Event'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('SendGridEventId')}">
+                            Send Grid Event Id
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'SendGridEventId', 'fa-caret-down': orderByDescending() == 'SendGridEventId'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('Response')}">
+                            Response
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'Response', 'fa-caret-down': orderByDescending() == 'Response'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('Url')}">
+                            Url
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'Url', 'fa-caret-down': orderByDescending() == 'Url'}"></i>
+                        </th>
+                        <th style="width: 1%">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: items">
+                    <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: emailMessageEventId}">
+                        @if (@ViewBag.Editable)
+                        {
+                            <td class="prop-emailMessage">@(Knockout.SelectForObject<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.EmailMessage))</td>
+                            <td class="prop-timeStamp">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.TimeStamp))</td>
+                            <td class="prop-eventTime">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.EventTime, true))</td>
+                            <td class="prop-event">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Event))</td>
+                            <td class="prop-sendGridEventId">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.SendGridEventId))</td>
+                            <td class="prop-response">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Response))</td>
+                            <td class="prop-url">@(Knockout.InputFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Url))</td>
+                        }
+                        else
+                        {
+                            <td class="prop-emailMessage">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.EmailMessage, true))</td>
+                            <td class="prop-timeStamp">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.TimeStamp, true))</td>
+                            <td class="prop-eventTime">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.EventTime, true))</td>
+                            <td class="prop-event">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Event, true))</td>
+                            <td class="prop-sendGridEventId">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.SendGridEventId, true))</td>
+                            <td class="prop-response">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Response, true))</td>
+                            <td class="prop-url">@(Knockout.DisplayFor<SendGridDemo.Data.Models.EmailMessageEvent>(p => p.Url, true))</td>
+                        }
+                        <td>
+                            <!-- Editor buttons -->
+                            <div class="btn-group pull-right" role="group" style="display: inline-flex">
+                                <a class="btn btn-sm btn-default" data-bind="attr: { href: editUrl }">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <button class="btn btn-sm btn-danger" data-bind="click: deleteItemWithConfirmation">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                            </div>
+                            <div class="form-control-static" data-bind="text: errorMessage"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script>
+        @if (!ViewBag.Editable)
+        {
+            @:Coalesce.GlobalConfiguration.viewModel.setupValidationAutomatically(false);
+        }
+        var emailMessageEventList = new ListViewModels.EmailMessageEventList();
+        
+        // Set up parent info based on the URL.
+        @if (ViewBag.Query != null)
+        {
+            @:emailMessageEventList.queryString = "@(ViewBag.Query)";
+        }
+        
+        // Save and restore values from the URL:
+        var urlVariables = ['page', 'pageSize', 'search', 'orderBy', 'orderByDescending'];
+        $.each(urlVariables, function(){
+            var param = Coalesce.Utilities.GetUrlParameter(this);
+            if (param) {emailMessageEventList[this](param);}
+        })
+        emailMessageEventList.isLoading.subscribe(function(){
+            var newUrl = window.location.href;
+        
+            $.each(urlVariables, function(){
+                var param = emailMessageEventList[this]();
+                newUrl = Coalesce.Utilities.SetUrlParameter(newUrl, this, param);
+            })
+            history.replaceState(null, document.title, newUrl);
+        });
+        
+        emailMessageEventList.isSavingAutomatically = false;
+        ko.applyBindings(emailMessageEventList);
+        emailMessageEventList.isSavingAutomatically = true;
+        
+        emailMessageEventList.includes = "EmailMessageEventListGen";
+        emailMessageEventList.load();
+    </script>
+}
